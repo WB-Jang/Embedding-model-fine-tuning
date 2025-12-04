@@ -61,7 +61,19 @@ class EmbeddingFineTuner:
             epochs: Number of training epochs
             output_path: Path to save the fine-tuned model
             warmup_steps: Number of warmup steps
+
+        Raises:
+            ValueError: If input parameters are invalid
         """
+        if not train_examples:
+            raise ValueError("train_examples cannot be empty")
+        if batch_size <= 0:
+            raise ValueError("batch_size must be positive")
+        if epochs <= 0:
+            raise ValueError("epochs must be positive")
+        if not output_path:
+            raise ValueError("output_path cannot be empty")
+
         logger.info(f"Starting training with {len(train_examples)} examples")
 
         # Create DataLoader

@@ -2,8 +2,6 @@
 
 import json
 import csv
-import tempfile
-from pathlib import Path
 from embedding_finetune.utils import (
     load_training_data_from_csv,
     load_training_data_from_json,
@@ -12,27 +10,25 @@ from embedding_finetune.utils import (
 )
 
 
-def test_load_training_data_from_csv():
+def test_load_training_data_from_csv(tmp_path):
     """Test loading training data from CSV."""
-    with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+    csv_path = tmp_path / "test.csv"
+    with open(csv_path, "w") as f:
         writer = csv.writer(f)
         writer.writerow(["text1", "text2", "score"])
         writer.writerow(["hello", "hi", "0.9"])
         writer.writerow(["world", "earth", "0.8"])
-        csv_path = f.name
 
-    try:
-        data = load_training_data_from_csv(csv_path)
-        assert len(data) == 2
-        assert data[0] == ("hello", "hi", 0.9)
-        assert data[1] == ("world", "earth", 0.8)
-    finally:
-        Path(csv_path).unlink()
+    data = load_training_data_from_csv(str(csv_path))
+    assert len(data) == 2
+    assert data[0] == ("hello", "hi", 0.9)
+    assert data[1] == ("world", "earth", 0.8)
 
 
-def test_load_training_data_from_json():
+def test_load_training_data_from_json(tmp_path):
     """Test loading training data from JSON."""
-    with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+    json_path = tmp_path / "test.json"
+    with open(json_path, "w") as f:
         json.dump(
             [
                 {"text1": "hello", "text2": "hi", "score": 0.9},
@@ -40,18 +36,14 @@ def test_load_training_data_from_json():
             ],
             f,
         )
-        json_path = f.name
 
-    try:
-        data = load_training_data_from_json(json_path)
-        assert len(data) == 2
-        assert data[0] == ("hello", "hi", 0.9)
-        assert data[1] == ("world", "earth", 0.8)
-    finally:
-        Path(json_path).unlink()
+    data = load_training_data_from_json(str(json_path))
+    assert len(data) == 2
+    assert data[0] == ("hello", "hi", 0.9)
+    assert data[1] == ("world", "earth", 0.8)
 
 
-def test_save_and_load_config():
+def test_save_and_load_config(tmp_path):
     """Test saving and loading configuration."""
     config = {
         "model_name": "BAAI/bge-m3",
@@ -59,9 +51,8 @@ def test_save_and_load_config():
         "epochs": 3,
     }
 
-    with tempfile.TemporaryDirectory() as tmpdir:
-        config_path = Path(tmpdir) / "config.json"
-        save_config(config, str(config_path))
+    config_path = tmp_path / "config.json"
+    save_config(config, str(config_path))
 
-        loaded_config = load_config(str(config_path))
-        assert loaded_config == config
+    loaded_config = load_config(str(config_path))
+    assert loaded_config == config

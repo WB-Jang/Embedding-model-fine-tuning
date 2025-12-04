@@ -35,3 +35,27 @@ def test_encode():
 
     assert embeddings.shape[0] == 2  # Two texts
     assert embeddings.shape[1] > 0  # Embedding dimension
+
+
+def test_train_validation():
+    """Test that train method validates input parameters."""
+    import pytest
+    fine_tuner = EmbeddingFineTuner(model_name="sentence-transformers/all-MiniLM-L6-v2")
+
+    # Test empty train_examples
+    with pytest.raises(ValueError, match="train_examples cannot be empty"):
+        fine_tuner.train([])
+
+    # Test invalid batch_size
+    sample_data = [("text1", "text2", 0.8)]
+    examples = fine_tuner.prepare_training_data(sample_data)
+    with pytest.raises(ValueError, match="batch_size must be positive"):
+        fine_tuner.train(examples, batch_size=0)
+
+    # Test invalid epochs
+    with pytest.raises(ValueError, match="epochs must be positive"):
+        fine_tuner.train(examples, epochs=-1)
+
+    # Test empty output_path
+    with pytest.raises(ValueError, match="output_path cannot be empty"):
+        fine_tuner.train(examples, output_path="")
