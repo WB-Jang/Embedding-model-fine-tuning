@@ -92,7 +92,7 @@ case $choice in
         echo ""
         echo "🎉 Setup complete!"
         echo "To run the training script:"
-        echo "  docker run -v \$(pwd)/finetuned_finance_model:/app/finetuned_finance_model embedding-finetuning"
+        echo "  docker run -v \${PWD}/finetuned_finance_model:/app/finetuned_finance_model embedding-finetuning"
         echo ""
         echo "Or use Docker Compose:"
         echo "  docker-compose up"

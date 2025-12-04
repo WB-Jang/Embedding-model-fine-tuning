@@ -11,8 +11,16 @@ def verify_main_py():
     print("🔍 Verifying src/main.py...")
     
     # Read the file
-    with open('src/main.py', 'r', encoding='utf-8') as f:
-        code = f.read()
+    try:
+        with open('src/main.py', 'r', encoding='utf-8') as f:
+            code = f.read()
+    except FileNotFoundError:
+        print("❌ Error: src/main.py not found")
+        print("   Make sure you are running this script from the project root directory")
+        return False
+    except Exception as e:
+        print(f"❌ Error reading src/main.py: {e}")
+        return False
     
     # Check if it's valid Python syntax
     try:

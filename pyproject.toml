@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "embedding-model-fine-tuning"
 version = "0.1.0"
-description = "Project doing fine-tuning process on various embedding models including bge-m3, snowflake-artic etc."
+description = "Project doing fine-tuning process on various embedding models including bge-m3, snowflake-arctic etc."
 authors = ["WB-Jang"]
 readme = "README.md"
 packages = [{include = "src"}]

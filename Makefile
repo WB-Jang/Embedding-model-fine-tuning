@@ -1,5 +1,8 @@
 .PHONY: help install install-poetry run verify docker-build docker-run docker-compose-up clean
 
+# Variables
+MODEL_DIR := finetuned_finance_model
+
 help:
 	@echo "Available commands:"
 	@echo "  make install          - Install dependencies using pip"
@@ -27,13 +30,13 @@ docker-build:
 	docker build -t embedding-finetuning .
 
 docker-run:
-	docker run -v $$(pwd)/finetuned_finance_model:/app/finetuned_finance_model embedding-finetuning
+	docker run -v $$(pwd)/$(MODEL_DIR):/app/$(MODEL_DIR) embedding-finetuning
 
 docker-compose-up:
 	docker-compose up --build
 
 clean:
-	rm -rf finetuned_finance_model/
+	rm -rf $(MODEL_DIR)/
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
 	find . -type f -name "*.pyo" -delete
