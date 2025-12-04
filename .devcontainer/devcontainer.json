@@ -1,6 +1,6 @@
 {
   "name": "Embedding Model Fine-tuning",
-  "dockerFile": "../Dockerfile",
+  "dockerfile": "../Dockerfile",
   "context": "..",
   
   // Set *default* container specific settings.json values on container create.
