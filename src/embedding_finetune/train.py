@@ -1,7 +1,6 @@
 """Main training module for fine-tuning embedding models."""
 
 import torch
-from transformers import AutoTokenizer, AutoModel
 from sentence_transformers import SentenceTransformer, InputExample, losses
 from torch.utils.data import DataLoader
 from typing import List, Tuple, Optional

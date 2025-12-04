@@ -3,7 +3,6 @@
 import json
 import csv
 import tempfile
-import pytest
 from pathlib import Path
 from embedding_finetune.utils import (
     load_training_data_from_csv,
