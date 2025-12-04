@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  embedding-finetuning:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: embedding-model-finetuning
+    volumes:
+      - ./src:/app/src
+      - ./finetuned_finance_model:/app/finetuned_finance_model
+    environment:
+      - PYTHONUNBUFFERED=1
+    # Uncomment to use GPU (requires nvidia-docker)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
