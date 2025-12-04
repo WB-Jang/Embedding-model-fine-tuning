@@ -40,27 +40,45 @@ def verify_main_py():
     else:
         print("✅ All required imports are present")
     
-    # Check for key variables
-    has_model_id = 'MODEL_ID' in code
-    has_output_path = 'OUTPUT_PATH' in code
-    has_batch_size = 'BATCH_SIZE' in code
-    has_num_epochs = 'NUM_EPOCHS' in code
+    # Check for key variables using AST
+    config_vars = {'MODEL_ID': False, 'OUTPUT_PATH': False, 'BATCH_SIZE': False, 'NUM_EPOCHS': False}
     
-    if all([has_model_id, has_output_path, has_batch_size, has_num_epochs]):
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign):
+            for target in node.targets:
+                if isinstance(target, ast.Name):
+                    if target.id in config_vars:
+                        config_vars[target.id] = True
+    
+    if all(config_vars.values()):
         print("✅ All configuration variables are defined")
     else:
-        print("⚠️  Some configuration variables might be missing")
+        missing = [k for k, v in config_vars.items() if not v]
+        print(f"⚠️  Missing configuration variables: {missing}")
     
-    # Check for main training logic
-    has_model_load = 'SentenceTransformer' in code
-    has_dataloader = 'DataLoader' in code
-    has_loss = 'MultipleNegativesRankingLoss' in code
-    has_fit = '.fit(' in code
+    # Check for main training logic using AST
+    training_components = {
+        'SentenceTransformer': False,
+        'DataLoader': False, 
+        'MultipleNegativesRankingLoss': False,
+        'fit': False
+    }
     
-    if all([has_model_load, has_dataloader, has_loss, has_fit]):
+    for node in ast.walk(tree):
+        # Check for class/function names
+        if isinstance(node, ast.Name):
+            if node.id in training_components:
+                training_components[node.id] = True
+        # Check for attributes like losses.MultipleNegativesRankingLoss or .fit()
+        elif isinstance(node, ast.Attribute):
+            if node.attr in training_components:
+                training_components[node.attr] = True
+    
+    if all(training_components.values()):
         print("✅ Main training components are present")
     else:
-        print("⚠️  Some training components might be missing")
+        missing = [k for k, v in training_components.items() if not v]
+        print(f"⚠️  Missing training components: {missing}")
     
     print("\n✨ Verification complete!")
     print("\n📝 Summary:")
