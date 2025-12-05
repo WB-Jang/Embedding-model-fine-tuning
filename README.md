@@ -6,6 +6,9 @@ Project for fine-tuning various embedding models including BGE-M3, Snowflake-Arc
 
 - Fine-tune embedding models using sentence-transformers
 - Support for multiple embedding models (BGE-M3, Snowflake-Arctic, etc.)
+- **Two training modes:**
+  - **Symmetric:** For similarity tasks with (text1, text2, similarity_score) format
+  - **Asymmetric:** For term-definition pairs like dictionary data (term, definition)
 - Docker and DevContainer support for consistent development environment
 - Poetry for dependency management
 - GPU support for efficient training
@@ -87,7 +90,7 @@ poetry run python -m embedding_finetune.train
 
 ## Usage
 
-### Basic Training Example
+### Basic Training Example (Symmetric Similarity)
 
 ```python
 from embedding_finetune.train import EmbeddingFineTuner
@@ -104,6 +107,37 @@ fine_tuner = EmbeddingFineTuner(model_name="BAAI/bge-small-en-v1.5")
 # Prepare and train
 train_examples = fine_tuner.prepare_training_data(data)
 fine_tuner.train(train_examples, epochs=3, output_path="./models/my_model")
+```
+
+### Term-Definition Training (Asymmetric)
+
+For dictionary data like the 기획재정부 시사경제용어사전 (Ministry of Economy and Finance Current Economic Terms Dictionary), use asymmetric training:
+
+```python
+from embedding_finetune.train import EmbeddingFineTuner
+
+# Dictionary data: (term, definition)
+dictionary_data = [
+    ("GDP", "국내총생산은 일정 기간 동안 한 나라 안에서 생산된 모든 최종 재화와 서비스의 시장 가치를 합한 것이다."),
+    ("인플레이션", "물가가 지속적으로 상승하는 경제 현상으로, 화폐 가치가 하락하고 구매력이 감소하는 것을 의미한다."),
+    ("양적완화", "중앙은행이 국채나 회사채 등을 매입하여 시중에 유동성을 공급함으로써 경기를 부양하는 통화정책이다."),
+]
+
+# Initialize fine-tuner with asymmetric loss
+fine_tuner = EmbeddingFineTuner(
+    model_name="BAAI/bge-m3",  # Multilingual model for Korean
+    use_asymmetric_loss=True
+)
+
+# Prepare and train
+train_examples = fine_tuner.prepare_term_definition_data(dictionary_data)
+fine_tuner.train(train_examples, epochs=10, output_path="./models/economic_terms_model")
+```
+
+You can also run the example script:
+
+```bash
+poetry run python src/main.py
 ```
 
 ### Loading Data from Files

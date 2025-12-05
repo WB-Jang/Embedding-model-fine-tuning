@@ -11,28 +11,38 @@ logger = logging.getLogger(__name__)
 
 
 class EmbeddingFineTuner:
-    """Fine-tune embedding models like BGE-M3, Snowflake-Arctic, etc."""
+    """Fine-tune embedding models like BGE-M3, Snowflake-Arctic, etc.
+
+    Supports both symmetric (text1, text2, similarity) and asymmetric (term, definition)
+    training scenarios.
+    """
 
     def __init__(
         self,
         model_name: str = "BAAI/bge-m3",
         device: Optional[str] = None,
+        use_asymmetric_loss: bool = False,
     ):
         """Initialize the fine-tuner.
 
         Args:
             model_name: Name of the pre-trained model to fine-tune
             device: Device to use for training (cuda/cpu)
+            use_asymmetric_loss: If True, use MultipleNegativesRankingLoss for
+                asymmetric tasks like term-definition matching. If False, use
+                CosineSimilarityLoss for symmetric similarity tasks.
         """
         self.model_name = model_name
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self.use_asymmetric_loss = use_asymmetric_loss
         logger.info(f"Initializing model: {model_name} on device: {self.device}")
+        logger.info(f"Using asymmetric loss: {use_asymmetric_loss}")
         self.model = SentenceTransformer(model_name, device=self.device)
 
     def prepare_training_data(
         self, data: List[Tuple[str, str, float]]
     ) -> List[InputExample]:
-        """Prepare training data for fine-tuning.
+        """Prepare training data for fine-tuning (symmetric similarity task).
 
         Args:
             data: List of tuples (text1, text2, similarity_score)
@@ -43,6 +53,28 @@ class EmbeddingFineTuner:
         examples = []
         for text1, text2, score in data:
             examples.append(InputExample(texts=[text1, text2], label=score))
+        return examples
+
+    def prepare_term_definition_data(
+        self, data: List[Tuple[str, str]]
+    ) -> List[InputExample]:
+        """Prepare term-definition pairs for fine-tuning (asymmetric task).
+
+        This is suitable for dictionary-like data where terms (short queries)
+        need to match with definitions (longer documents).
+
+        Args:
+            data: List of tuples (term, definition)
+
+        Returns:
+            List of InputExample objects without labels (for MultipleNegativesRankingLoss)
+        """
+        examples = []
+        for term, definition in data:
+            # For asymmetric tasks, we don't need labels
+            # MultipleNegativesRankingLoss will use in-batch negatives
+            examples.append(InputExample(texts=[term, definition]))
+        logger.info(f"Prepared {len(examples)} term-definition pairs")
         return examples
 
     def train(
@@ -79,8 +111,17 @@ class EmbeddingFineTuner:
         # Create DataLoader
         train_dataloader = DataLoader(train_examples, shuffle=True, batch_size=batch_size)
 
-        # Define loss function
-        train_loss = losses.CosineSimilarityLoss(self.model)
+        # Define loss function based on training mode
+        if self.use_asymmetric_loss:
+            # Use MultipleNegativesRankingLoss for asymmetric tasks (e.g., term-definition)
+            # This loss function is ideal for information retrieval tasks where
+            # queries (terms) need to match documents (definitions)
+            train_loss = losses.MultipleNegativesRankingLoss(self.model)
+            logger.info("Using MultipleNegativesRankingLoss for asymmetric task")
+        else:
+            # Use CosineSimilarityLoss for symmetric similarity tasks
+            train_loss = losses.CosineSimilarityLoss(self.model)
+            logger.info("Using CosineSimilarityLoss for symmetric task")
 
         # Train the model
         self.model.fit(
