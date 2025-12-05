@@ -10,7 +10,19 @@ packages = [{include = "src"}]
 python = "^3.9"
 pandas = "^2.0.0"
 sentence-transformers = "^2.2.0"
-torch = "^2.0.0"
+# SentenceTransformers 내부에서도 transformers를 사용하지만,
+# 명시적으로 버전을 관리하기 위해 별도로 추가합니다.
+transformers = "^4.38.0"
+
+# 아래 두 패키지는 현재 main.py에서 직접 사용하지는 않지만,
+# 향후 Hugging Face 기반 학습/추론 파이프라인 확장을 위해 유용합니다.
+accelerate = "^0.28.0"
+datasets = "^2.18.0"
+
+# torch는 Docker 베이스 이미지(pytorch/pytorch:2.2.0-cuda12.1-cudnn8-runtime)에
+# 이미 GPU+CUDA 버전으로 설치되어 있으므로 여기서는 명시하지 않습니다.
+# 만약 로컬(비도커) 환경에서 Poetry만으로 설치해 개발한다면,
+# 해당 환경에 맞는 torch를 별도로 설치해야 합니다 (pip install torch ... 등).
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.0.0"
