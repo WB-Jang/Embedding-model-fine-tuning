@@ -1,5 +1,6 @@
 # Embedding-model-fine-tuning
 Project doing fine-tuning process on various embedding models including bge-m3, snowflake-arctic etc.
+Google Colab으로 테스트 완료, 주피터노트북 src에서 참조
 
 ## 📋 Requirements
 
