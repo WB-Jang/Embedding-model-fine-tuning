@@ -34,4 +34,4 @@ ENV PYTHONDONTWRITEBYTECODE=1
 RUN mkdir -p /app/finetuned_finance_model
 
 # 컨테이너 기본 실행 명령: main.py 실행
-CMD ["python", "src/main.py"]
+# CMD ["python", "src/main.py"]
