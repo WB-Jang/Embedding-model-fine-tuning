@@ -22,9 +22,9 @@ datasets = "^2.18.0"
 fastapi = "^0.110.0"
 uvicorn = {version = "^0.27.0", extras = ["standard"]}
 
-# torch는 Docker 베이스 이미지(pytorch/pytorch:2.2.0-cuda12.1-cudnn8-runtime)에
-# 이미 GPU+CUDA 버전으로 설치되어 있으므로 여기서는 명시하지 않습니다.
-# 로컬(비도커) 환경에서 Poetry만 사용하는 경우에는 별도로 'pip install torch ...'가 필요할 수 있습니다.
+# torch: 베이스 이미지에 포함된 버전을 사용하되, Poetry가 CUDA 패키지를 업데이트하지 않도록
+# 명시적으로 버전을 지정합니다.
+torch = "^2.5.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.0.0"
