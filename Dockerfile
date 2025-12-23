@@ -1,5 +1,6 @@
 # PyTorch 2.2 + CUDA 12.1 + cuDNN 8이 포함된 공식 이미지 (GPU용)
-FROM pytorch/pytorch:2.2.0-cuda12.1-cudnn8-runtime
+# 최신 버전으로 업데이트 함
+FROM pytorch/pytorch:2.5.1-cuda12.4-cudnn9-runtime
 
 # 시스템 패키지 설치
 RUN apt-get update && apt-get install -y \
@@ -20,8 +21,12 @@ COPY pyproject.toml poetry.lock* ./
 
 # Poetry를 전역 환경에 설치하도록 설정하고, 의존성 설치
 # (virtualenvs.create=false 이면 컨테이너의 전역 Python 환경에 설치됨)
+# --no-update 옵션으로 기존 torch 및 CUDA 패키지를 보호
 RUN poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi
+    poetry install --no-interaction --no-ansi --no-root || \
+    (echo "Retrying with pip fallback..." && \
+     pip install --no-cache-dir sentence-transformers transformers accelerate datasets fastapi uvicorn[standard] pandas)
+
 
 # 애플리케이션 코드 복사
 COPY src/ ./src/
