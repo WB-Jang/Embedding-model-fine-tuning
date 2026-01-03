@@ -4,16 +4,27 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: embedding-model-finetuning
+    ports:
+      - "8888:8888"  # Jupyter Lab
     volumes:
       - ./src:/app/src
+      - ./data:/app/data
       - ./finetuned_finance_model:/app/finetuned_finance_model
+      - ./Embedding_model_fine_tuning_test.ipynb:/app/Embedding_model_fine_tuning_test.ipynb
     environment:
       - PYTHONUNBUFFERED=1
-    # Uncomment to use GPU (requires nvidia-docker)
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: 1
-    #           capabilities: [gpu]
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    # GPU support for RTX 4060
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    # Alternative for older docker-compose versions:
+    # runtime: nvidia
+    shm_size: '8gb'  # Increase shared memory for PyTorch
+    stdin_open: true
+    tty: true
