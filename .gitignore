@@ -29,9 +29,6 @@ ENV/
 env/
 .venv
 
-# Poetry
-poetry.lock
-
 # IDEs
 .vscode/
 .idea/
@@ -49,9 +46,8 @@ finetuned_finance_model/
 .DS_Store
 Thumbs.db
 
-# Jupyter
+# Jupyter (ignore checkpoints but keep notebooks)
 .ipynb_checkpoints/
-*.ipynb
 
 # Logs
 *.log

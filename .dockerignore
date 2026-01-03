@@ -32,21 +32,15 @@ Thumbs.db
 
 # Models and data
 finetuned_finance_model/
-*.csv
-*.parquet
-*.jsonl
-
-# Docker
-Dockerfile*
-docker-compose*.yml
-.dockerignore
 
 # Documentation
 README.md
-
-# Poetry
-poetry.lock
+SETUP.md
+VERIFICATION_REPORT.md
 
 # Logs
 *.log
 logs/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
