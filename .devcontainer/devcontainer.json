@@ -26,7 +26,7 @@
 		}
 	},
 	"forwardPorts": [8888],
-	"postCreateCommand": "echo 'Container ready! Run: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=\"\" --NotebookApp.password=\"\"'",
+	"postCreateCommand": "echo '✅ Container ready! To start Jupyter Lab, run: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root'",
 	"remoteUser": "root",
 	"mounts": [
 		"source=${localWorkspaceFolder}/finetuned_finance_model,target=/app/finetuned_finance_model,type=bind",
