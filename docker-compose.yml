@@ -23,8 +23,7 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
-    # Alternative for older docker-compose versions:
-    # runtime: nvidia
+    # Note: For older Docker Compose v1.x, use: runtime: nvidia
     shm_size: '8gb'  # Increase shared memory for PyTorch
     stdin_open: true
     tty: true

@@ -54,6 +54,12 @@ docker-compose up -d --build
 http://localhost:8888
 ```
 
+**보안 참고사항**: 
+- Jupyter Lab이 처음 시작되면 콘솔에 토큰이 표시됩니다
+- 로그에서 토큰 확인: `docker-compose logs | grep token`
+- 또는 URL 전체를 복사하여 브라우저에 붙여넣기
+- 프로덕션 환경에서는 비밀번호 설정 권장
+
 3. **컨테이너 로그 확인**
 ```bash
 docker-compose logs -f

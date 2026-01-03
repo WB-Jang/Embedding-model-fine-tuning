@@ -35,4 +35,5 @@ RUN mkdir -p /app/finetuned_finance_model
 RUN mkdir -p /root/.jupyter
 
 # 기본 실행 명령 (Jupyter Lab)
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.password=''"]
+# Note: For production use, set a token or password for security
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]

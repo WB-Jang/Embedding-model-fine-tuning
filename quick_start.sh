@@ -30,7 +30,7 @@ else
 fi
 
 # Check for NVIDIA Docker (optional but recommended for GPU)
-if docker run --rm --gpus all nvidia/cuda:12.4.0-base-ubuntu22.04 nvidia-smi &> /dev/null; then
+if command -v nvidia-smi &> /dev/null && docker info 2>/dev/null | grep -q "Runtimes.*nvidia"; then
     echo "✅ NVIDIA Docker runtime is available (GPU support enabled)"
     GPU_AVAILABLE=true
 else

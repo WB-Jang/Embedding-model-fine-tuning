@@ -6,9 +6,9 @@ Embedding_model_fine_tuning_test.ipynb를 실행할 수 있는 도커 컨테이�
 ## 완료된 작업
 
 ### 1. Poetry 제거 ✅
-- ❌ `pyproject.toml` 삭제
-- ❌ Poetry 관련 `.gitignore` 항목 제거
-- ❌ Poetry 관련 `.dockerignore` 항목 제거
+- ✅ `pyproject.toml` 삭제
+- ✅ Poetry 관련 `.gitignore` 항목 제거
+- ✅ Poetry 관련 `.dockerignore` 항목 제거
 - ✅ requirements.txt로 전환
 
 ### 2. requirements.txt 업데이트 ✅
