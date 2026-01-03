@@ -70,19 +70,28 @@ docker-compose logs -f
 docker-compose down
 ```
 
-### 방법 2: VSCode Dev Container 사용
+### 방법 2: VSCode Dev Container 사용 (권장)
+
+**노트북을 VSCode에서 직접 실행할 수 있습니다!**
 
 1. **VSCode 확장 설치**
    - "Dev Containers" 확장 설치
+   - "Jupyter" 확장 (자동으로 설치됨)
 
 2. **컨테이너에서 열기**
    - `F1` 또는 `Ctrl+Shift+P` 눌러 명령 팔레트 열기
    - "Dev Containers: Reopen in Container" 선택
+   - 컨테이너 빌드 대기 (첫 실행 시)
 
-3. **Jupyter 실행**
-   컨테이너 내부 터미널에서:
+3. **노트북 실행**
+   - `Embedding_model_fine_tuning_test.ipynb` 파일 열기
+   - VSCode에서 바로 셀 실행 (Shift+Enter)
+   - **Jupyter Lab 실행 불필요!**
+
+4. **(선택사항) Jupyter Lab 사용**
+   별도로 Jupyter Lab을 실행하려면 터미널에서:
    ```bash
-   jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
+   jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
    ```
 
 ### 방법 3: Docker 직접 사용

@@ -34,12 +34,17 @@ docker-compose up -d --build
 # 브라우저에서 http://localhost:8888 열기
 ```
 
-#### 2. VSCode Dev Container 사용
+#### 2. VSCode Dev Container 사용 (권장)
+
+**VSCode에서 직접 노트북 실행 가능 - Jupyter Lab 불필요!**
 
 1. VSCode에서 "Dev Containers" 확장 설치
 2. 프로젝트 폴더 열기
 3. `F1` → "Dev Containers: Reopen in Container" 선택
-4. 컨테이너 내부에서 Jupyter Lab 실행:
+4. 컨테이너가 빌드되면 `Embedding_model_fine_tuning_test.ipynb` 파일 열기
+5. VSCode에서 바로 셀 실행 (Jupyter 확장 자동 사용)
+
+**선택사항**: Jupyter Lab을 별도로 실행하려면:
 ```bash
 jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
 ```
@@ -87,12 +92,27 @@ Embedding-model-fine-tuning/
 4. **학습 실행**: MultipleNegativesRankingLoss로 모델 학습
 5. **모델 저장**: 학습된 모델 저장 및 테스트
 
-### 노트북 접속 방법
+### 노트북 실행 방법
+
+#### 방법 1: VSCode에서 직접 실행 (권장)
+
+1. VSCode Dev Container 열기 (위 "VSCode Dev Container 사용" 참조)
+2. `Embedding_model_fine_tuning_test.ipynb` 파일 클릭
+3. VSCode의 Jupyter 확장이 자동으로 활성화됨
+4. 셀을 순서대로 실행 (Shift+Enter 또는 실행 버튼)
+
+**장점**: 
+- Jupyter Lab을 별도로 실행할 필요 없음
+- VSCode의 통합 환경에서 작업
+- 디버깅 및 IntelliSense 지원
+
+#### 방법 2: Jupyter Lab 브라우저 인터페이스
 
 1. Docker 컨테이너 실행 후
 2. 브라우저에서 `http://localhost:8888` 접속
-3. `Embedding_model_fine_tuning_test.ipynb` 열기
-4. 셀을 순서대로 실행
+3. 로그에서 토큰 확인 후 입력
+4. `Embedding_model_fine_tuning_test.ipynb` 열기
+5. 셀을 순서대로 실행
 
 ## 🔧 주요 설정
 
